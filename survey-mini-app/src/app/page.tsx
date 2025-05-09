@@ -34,7 +34,7 @@ export default function Survey() {
   const [answers, setAnswers] = useState<{ [key: number]: string }>({})
 
   useEffect(() => {
-    if (WebApp.initDataUnsafe.user) {
+    if (typeof window !== "undefined" && WebApp.initDataUnsafe?.user) {
       setUserData(WebApp.initDataUnsafe.user as UserData)
     }
   }, [])
