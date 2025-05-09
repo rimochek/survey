@@ -44,7 +44,7 @@ export default function Survey() {
       {
         id: userData?.id,
         username: userData?.username,
-        answers: answers,
+        answers: JSON.stringify(answers),
       },
     ])
     if (error) {
