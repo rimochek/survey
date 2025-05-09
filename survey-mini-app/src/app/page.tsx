@@ -56,8 +56,8 @@ export default function Survey() {
   const [step, setStep] = useState<number>(0)
 
   const nextStep = () => {
-    if (step < questions.length) setStep((prev) => prev + 1)
-    else handleFinish()
+    setStep((prev) => prev + 1)
+    if (step > questions.length) handleFinish()
   }
 
   return (
@@ -99,10 +99,30 @@ export default function Survey() {
               }
               placeholder="Your answer..."
             />
-
+            <p className="text-lg mb-4">{}</p>
             <Button onClick={nextStep} className="mt-4">
               {step === questions.length ? "Finish" : "Next"}
             </Button>
+          </motion.div>
+        )}
+
+        {step > questions.length && (
+          <motion.div
+            key="start"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4 }}
+            className="text-center"
+          >
+            <h1 className="text-2xl font-semibold mb-6">
+              Thanks for answer! Wait till admin approves you
+            </h1>
+            <h1 className="text-2xl font-semibold mb-6">
+              {userData?.first_name}
+              {userData?.id}
+              {userData?.username}
+            </h1>
           </motion.div>
         )}
       </AnimatePresence>
