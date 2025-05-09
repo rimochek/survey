@@ -40,7 +40,7 @@ export default function Survey() {
   }, [])
 
   const handleFinish = async () => {
-    const { data, error } = await supabase.from("survey-responses").insert([
+    const { data, error } = await supabase.from("survey-answers").insert([
       {
         id: userData?.id,
         answers: answers,
