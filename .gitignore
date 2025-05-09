@@ -1,0 +1,6 @@
+# Ignore Python cache and env
+survey-bot/__pycache__/
+survey-bot/.env
+
+# Ignore Node.js dependencies
+survey-mini-app/node_modules/
