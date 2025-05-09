@@ -57,8 +57,12 @@ export default function Survey() {
   const [step, setStep] = useState<number>(0)
 
   const nextStep = () => {
-    setStep((prev) => prev + 1)
-    if (step > questions.length) handleFinish()
+    if (step === questions.length) {
+      handleFinish()
+      setStep((prev) => prev + 1)
+    } else {
+      setStep((prev) => prev + 1)
+    }
   }
 
   return (
