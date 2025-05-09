@@ -1,6 +1,5 @@
 "use client"
 
-import WebApp from "@twa-dev/sdk"
 import { useEffect, useState } from "react"
 
 interface UserData {
@@ -16,9 +15,14 @@ export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null)
 
   useEffect(() => {
-    if (WebApp.initDataUnsafe.user) {
-      setUserData(WebApp.initDataUnsafe.user as UserData)
+    const loadWebApp = async () => {
+      const { default: WebApp } = await import("@twa-dev/sdk")
+      if (WebApp.initDataUnsafe.user) {
+        setUserData(WebApp.initDataUnsafe.user as UserData)
+      }
     }
+
+    loadWebApp()
   }, [])
 
   return (
