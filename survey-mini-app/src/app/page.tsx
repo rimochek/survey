@@ -40,11 +40,17 @@ export default function Survey() {
   }, [])
 
   const handleFinish = async () => {
+    const answersArray = Object.entries(answers).map(
+      ([questionId, answer]) => ({
+        questionId: Number(questionId),
+        answer,
+      })
+    )
     const { data, error } = await supabase.from("survey-responses").insert([
       {
         id: userData?.id,
         username: userData?.username,
-        answers: JSON.stringify(answers),
+        answers: JSON.stringify(answersArray),
       },
     ])
     if (error) {
