@@ -32,7 +32,7 @@ interface UserData {
 export default function Survey() {
   const [userData, setUserData] = useState<UserData | null>(null)
   const [answers, setAnswers] = useState<{ [key: number]: string }>({})
-  const [isAlreadySubmitted, setAlreadySubmitted] = useState<boolean>()
+  const [isAlreadySubmitted, setAlreadySubmitted] = useState<boolean>(false)
 
   useEffect(() => {
     if (typeof window !== "undefined" && WebApp.initDataUnsafe?.user) {
@@ -56,7 +56,8 @@ export default function Survey() {
         setAlreadySubmitted(true)
       }
     }
-  }, [])
+    checkIfSubmitted()
+  }, [userData])
 
   const handleFinish = async () => {
     const answersArray = Object.entries(answers).map(
