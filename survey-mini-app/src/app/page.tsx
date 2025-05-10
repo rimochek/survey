@@ -55,6 +55,7 @@ export default function Survey() {
       if (existing) {
         setAlreadySubmitted(true)
       }
+      console.log(userData.id)
     }
     checkIfSubmitted()
   }, [userData])
