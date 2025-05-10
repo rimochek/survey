@@ -32,10 +32,29 @@ interface UserData {
 export default function Survey() {
   const [userData, setUserData] = useState<UserData | null>(null)
   const [answers, setAnswers] = useState<{ [key: number]: string }>({})
+  const [isAlreadySubmitted, setAlreadySubmitted] = useState<boolean>()
 
   useEffect(() => {
     if (typeof window !== "undefined" && WebApp.initDataUnsafe?.user) {
       setUserData(WebApp.initDataUnsafe.user as UserData)
+    }
+    const checkIfSubmitted = async () => {
+      if (!userData?.id) return
+
+      const { data: existing, error: checkError } = await supabase
+        .from("survey-responses")
+        .select("id")
+        .eq("id", userData.id)
+        .single()
+
+      if (checkError && checkError.code !== "PGRST116") {
+        console.error("Check error:", checkError)
+        return
+      }
+
+      if (existing) {
+        setAlreadySubmitted(true)
+      }
     }
   }, [])
 
@@ -74,7 +93,7 @@ export default function Survey() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
       <AnimatePresence mode="wait">
-        {step === 0 && (
+        {step === 0 && !isAlreadySubmitted && (
           <motion.div
             key="start"
             initial={{ opacity: 0, scale: 0.95 }}
@@ -128,6 +147,26 @@ export default function Survey() {
           >
             <h1 className="text-2xl font-semibold mb-6">
               Thanks for answer! Wait till admin approves you
+            </h1>
+            <h1 className="text-2xl font-semibold mb-6">
+              {userData?.first_name}
+              {userData?.id}
+              {userData?.username}
+            </h1>
+          </motion.div>
+        )}
+
+        {isAlreadySubmitted && (
+          <motion.div
+            key="start"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4 }}
+            className="text-center"
+          >
+            <h1 className="text-2xl font-semibold mb-6">
+              You already sent this form
             </h1>
             <h1 className="text-2xl font-semibold mb-6">
               {userData?.first_name}
