@@ -45,7 +45,7 @@ export default function Survey() {
         .from("survey-responses")
         .select("id")
         .eq("id", userData.id)
-        .single()
+        .maybeSingle()
 
       if (checkError && checkError.code !== "PGRST116") {
         console.error("Check error:", checkError)
