@@ -1,8 +1,0 @@
-2025-05-09 10:49:39,144 - INFO - aiogram.dispatcher - Start polling
-2025-05-09 10:49:39,276 - INFO - aiogram.dispatcher - Run polling for bot @bakhatbot id=5925783812 - 'Survey Mini App'
-2025-05-09 10:49:49,528 - INFO - aiogram.event - Update id=461935295 is not handled. Duration 0 ms by bot id=5925783812
-2025-05-09 10:50:27,017 - INFO - aiogram.dispatcher - Polling stopped
-2025-05-09 10:50:27,275 - INFO - aiogram.dispatcher - Polling stopped for bot @bakhatbot id=5925783812 - 'Survey Mini App'
-2025-05-09 10:50:47,242 - INFO - aiogram.dispatcher - Start polling
-2025-05-09 10:50:47,361 - INFO - aiogram.dispatcher - Run polling for bot @bakhatbot id=5925783812 - 'Survey Mini App'
-2025-05-09 10:50:47,997 - INFO - aiogram.event - Update id=461935296 is handled. Duration 483 ms by bot id=5925783812

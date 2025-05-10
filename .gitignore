@@ -1,6 +1,14 @@
 # Ignore Python cache and env
 survey-bot/__pycache__/
 survey-bot/.env
+survey-bot/data/usersAction.log
+survey-bot/data/__pycache__/
 
 # Ignore Node.js dependencies
 survey-mini-app/node_modules/
+survey-mini-app/.next/
+survey-mini-app/.env.local
+
+survey-admin-panel/node_modules/
+survey-mini-app/.next/
+survey-admin-panel/.env.local

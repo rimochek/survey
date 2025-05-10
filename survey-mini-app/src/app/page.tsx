@@ -8,8 +8,6 @@ import { Input } from "@/components/ui/input"
 import { supabase } from "@/lib/supabase"
 
 import WebApp from "@twa-dev/sdk"
-import { Database } from "lucide-react"
-import { data } from "framer-motion/client"
 
 const questions = [
   {
@@ -53,13 +51,9 @@ export default function Survey() {
         console.error("Check error:", checkError)
         return
       }
-      console.log(existing)
-      console.log(data)
       if (existing) {
         setAlreadySubmitted(true)
-        console.log("yeah")
       }
-      console.log(userData.id)
     }
     checkIfSubmitted()
   }, [userData])
@@ -172,12 +166,7 @@ export default function Survey() {
             className="text-center"
           >
             <h1 className="text-2xl font-semibold mb-6">
-              You already sent this form
-            </h1>
-            <h1 className="text-2xl font-semibold mb-6">
-              {userData?.first_name}
-              {userData?.id}
-              {userData?.username}
+              You already sent this form. Wait for response
             </h1>
           </motion.div>
         )}
