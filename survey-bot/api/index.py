@@ -1,15 +1,19 @@
 import os
 from typing import Optional
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from telegram import Update, Bot
-from telegram.ext import Dispatcher, MessageHandler, Filters, CommandHandler
+from telegram.ext import Dispatcher, CommandHandler
 
 TOKEN = os.environ.get("TOKEN")
 
 app = FastAPI()
+
+class NotificationRequest(BaseModel):
+    telegram_id: int
+    approved: str
 
 class TelegramWebhook(BaseModel):
     '''
@@ -29,7 +33,7 @@ class TelegramWebhook(BaseModel):
     poll_answer: Optional[dict]
 
 def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, please talk to me!")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Click the Open button to open Mini App")
 
 def register_handlers(dispatcher):
     start_handler = CommandHandler('start', start)
@@ -48,6 +52,16 @@ def webhook(webhook_data: TelegramWebhook):
     dispatcher.process_update(update)
 
     return {"message": "ok"}
+
+@app.post("/notify")
+def notify(req: NotificationRequest):
+    try:
+        bot = Bot(token=TOKEN)
+        message = "✅ You have been accepted!" if req.approved == "Approved" else "❌ You have been rejected."
+        bot.send_message(chat_id=req.telegram_id, text=message)
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/")
 def index():

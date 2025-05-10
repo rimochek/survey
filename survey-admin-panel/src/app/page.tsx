@@ -61,6 +61,17 @@ export default function Home() {
       return
     }
 
+    await fetch(`${process.env.NEXT_PUBLIC_BOT_NOTIFY}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        telegram_id: id,
+        approved: newStatus,
+      }),
+    })
+
     setResponses((prev) =>
       prev.map((res) => (res.id === id ? { ...res, status: newStatus } : res))
     )
