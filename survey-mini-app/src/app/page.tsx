@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { supabase } from "@/lib/supabase"
 
 import WebApp from "@twa-dev/sdk"
+import { Database } from "lucide-react"
+import { data } from "framer-motion/client"
 
 const questions = [
   {
@@ -51,7 +53,8 @@ export default function Survey() {
         console.error("Check error:", checkError)
         return
       }
-
+      console.log(existing)
+      console.log(data)
       if (existing) {
         setAlreadySubmitted(true)
         console.log("yeah")
