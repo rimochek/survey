@@ -50,7 +50,7 @@ export default function Survey() {
       {
         id: userData?.id,
         username: userData?.username,
-        answers: JSON.stringify(answersArray),
+        answers: answersArray,
       },
     ])
     if (error) {
