@@ -3,6 +3,7 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 from telegram import Update, Bot
 from telegram.ext import Dispatcher, CommandHandler
@@ -10,6 +11,14 @@ from telegram.ext import Dispatcher, CommandHandler
 TOKEN = os.environ.get("TOKEN")
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class NotificationRequest(BaseModel):
     telegram_id: int
