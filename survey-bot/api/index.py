@@ -66,7 +66,7 @@ def webhook(webhook_data: TelegramWebhook):
 def notify(req: NotificationRequest):
     try:
         bot = Bot(token=TOKEN)
-        message = "✅ You have been accepted!" if req.approved == "Approved" else "❌ You have been rejected."
+        message = "✅ You have been accepted!" if req.approved == "Accepted" else "❌ You have been rejected."
         bot.send_message(chat_id=req.telegram_id, text=message)
         return {"status": "success"}
     except Exception as e:
