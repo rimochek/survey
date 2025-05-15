@@ -25,9 +25,6 @@ class NotificationRequest(BaseModel):
     approved: str
 
 class TelegramWebhook(BaseModel):
-    '''
-    Telegram Webhook Model using Pydantic for request body validation
-    '''
     update_id: int
     message: Optional[dict]
     edited_message: Optional[dict]
@@ -50,9 +47,6 @@ def register_handlers(dispatcher):
 
 @app.post("/webhook")
 def webhook(webhook_data: TelegramWebhook):
-    '''
-    Telegram Webhook
-    '''
     bot = Bot(token=TOKEN)
     update = Update.de_json(webhook_data.__dict__, bot)
     dispatcher = Dispatcher(bot, None, workers=4)
@@ -74,4 +68,4 @@ def notify(req: NotificationRequest):
 
 @app.get("/")
 def index():
-    return {"message": "Hello World"}
+    return {"message": "i am alive"}
