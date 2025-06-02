@@ -164,22 +164,18 @@ export default function TopicEditor() {
         const updatedThemes = data.map((t) => ({ ...t, isNew: false }))
         setThemes([...updatedThemes, ...existingThemes])
 
-        const updatedQuestions = questions.map((q) =>
-          q.topic_id === null
-            ? {
-                ...q,
-                topic_id:
-                  nameToIdMap.get(
-                    newThemes.find((t) =>
-                      questions.some(
-                        (q2) =>
-                          q2.topic_id === null && q2.question === q.question
-                      )
-                    )?.name || ""
-                  ) ?? null,
-              }
-            : q
-        )
+        const updatedQuestions = questions.map((q) => {
+          if (q.topic_id !== null) return q
+
+          const foundTheme = newThemes.find(
+            (t) => t && t.name && q.question.includes(t.name)
+          )
+
+          return {
+            ...q,
+            topic_id: nameToIdMap.get(foundTheme?.name || "") ?? null,
+          }
+        })
         setQuestions(updatedQuestions)
       }
     }
@@ -206,22 +202,18 @@ export default function TopicEditor() {
           newThemes.map((t, i) => [t.name, data[i].id])
         )
 
-        const updatedQuestions = questions.map((q) =>
-          q.topic_id === null
-            ? {
-                ...q,
-                topic_id:
-                  nameToIdMap.get(
-                    newThemes.find((t) =>
-                      questions.some(
-                        (q2) =>
-                          q2.topic_id === null && q2.question === q.question
-                      )
-                    )?.name || ""
-                  ) ?? null,
-              }
-            : q
-        )
+        const updatedQuestions = questions.map((q) => {
+          if (q.topic_id !== null) return q
+
+          const foundTheme = newThemes.find(
+            (t) => t && t.name && q.question.includes(t.name)
+          )
+
+          return {
+            ...q,
+            topic_id: nameToIdMap.get(foundTheme?.name || "") ?? null,
+          }
+        })
         setQuestions(updatedQuestions)
       }
     }
@@ -289,22 +281,18 @@ export default function TopicEditor() {
           newThemes.map((t, i) => [t.name, data[i].id])
         )
 
-        const updatedQuestions = questions.map((q) =>
-          q.topic_id === null
-            ? {
-                ...q,
-                topic_id:
-                  nameToIdMap.get(
-                    newThemes.find((t) =>
-                      questions.some(
-                        (q2) =>
-                          q2.topic_id === null && q2.question === q.question
-                      )
-                    )?.name || ""
-                  ) ?? null,
-              }
-            : q
-        )
+        const updatedQuestions = questions.map((q) => {
+          if (q.topic_id !== null) return q
+
+          const foundTheme = newThemes.find(
+            (t) => t && t.name && q.question.includes(t.name)
+          )
+
+          return {
+            ...q,
+            topic_id: nameToIdMap.get(foundTheme?.name || "") ?? null,
+          }
+        })
         setQuestions(updatedQuestions)
       }
     }
