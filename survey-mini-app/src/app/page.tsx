@@ -118,7 +118,7 @@ export default function Survey() {
     setSelectedQuestions(
       questions.filter((question) => question.topic_id === theme.id)
     )
-    nextStep()
+    setStep(1)
   }
 
   const nextStep = () => {
@@ -173,11 +173,11 @@ export default function Survey() {
               {selectedQuestions[step - 1].question}
             </p>
             <Input
-              value={answers[step] || ""}
+              value={answers[selectedQuestions[step - 1]?.id ?? -1] || ""}
               onChange={(e) =>
                 setAnswers((prev) => ({
                   ...prev,
-                  [step]: e.target.value,
+                  [selectedQuestions[step - 1]?.id ?? -1]: e.target.value,
                 }))
               }
               placeholder="Your answer..."
