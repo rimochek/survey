@@ -9,17 +9,6 @@ import { supabase } from "@/lib/supabase"
 
 import WebApp from "@twa-dev/sdk"
 
-const questions = [
-  {
-    id: 1,
-    question: "What's new will you bring to this event?",
-  },
-  {
-    id: 2,
-    question: "Your own wishes",
-  },
-]
-
 interface UserData {
   id: number
   first_name: string
@@ -29,9 +18,27 @@ interface UserData {
   is_premium?: boolean
 }
 
+export type Theme = {
+  id: number | null
+  name: string
+  isNew?: boolean
+}
+
+export type Question = {
+  id: number | null
+  topic_id: number | null
+  question: string
+  isNew?: boolean
+  isUpdated?: boolean
+}
+
 export default function Survey() {
   const [userData, setUserData] = useState<UserData | null>(null)
   const [answers, setAnswers] = useState<{ [key: number]: string }>({})
+  const [themes, setThemes] = useState<Theme[]>([])
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [selectedTheme, setSelectedTheme] = useState<Theme>()
+  const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([])
   const [isAlreadySubmitted, setAlreadySubmitted] = useState<boolean>(false)
 
   useEffect(() => {
@@ -55,6 +62,31 @@ export default function Survey() {
         setAlreadySubmitted(true)
       }
     }
+
+    const fetchThemes = async () => {
+      const { data, error } = await supabase.from("topics").select("id, name")
+
+      if (error) {
+        console.error("Error fetching responses:", error)
+      } else {
+        setThemes(data)
+      }
+    }
+
+    const fetchQuestions = async () => {
+      const { data, error } = await supabase
+        .from("topics-questions")
+        .select("id, topic_id, question")
+
+      if (error) {
+        console.error("Error fetching responses:", error)
+      } else {
+        setQuestions(data)
+      }
+    }
+
+    fetchThemes()
+    fetchQuestions()
     checkIfSubmitted()
   }, [userData])
 
@@ -67,9 +99,9 @@ export default function Survey() {
     )
     const { data, error } = await supabase.from("survey-responses").insert([
       {
-        id: userData?.id,
-        username: userData?.username,
+        username: userData?.id,
         answers: answersArray,
+        topic_id: selectedTheme?.id,
       },
     ])
     if (error) {
@@ -81,8 +113,16 @@ export default function Survey() {
 
   const [step, setStep] = useState<number>(0)
 
+  const selectTheme = (theme: Theme) => {
+    setSelectedTheme(theme)
+    setSelectedQuestions(
+      questions.filter((question) => question.topic_id === theme.id)
+    )
+    nextStep()
+  }
+
   const nextStep = () => {
-    if (step === questions.length) {
+    if (step === selectedQuestions.length) {
       handleFinish()
       setStep((prev) => prev + 1)
     } else {
@@ -102,14 +142,25 @@ export default function Survey() {
             transition={{ duration: 0.4 }}
             className="text-center"
           >
-            <h1 className="text-2xl font-semibold mb-6">
+            <h1 className="text-2xl font-semibold mb-1">
               Welcome to the Support Feedback!
             </h1>
-            <Button onClick={nextStep}>Start</Button>
+            <p className="mb-6 text-xl">Click on the liked theme to choose</p>
+            <div className="flex flex-col items-center justify-center">
+              {themes.map((theme) => (
+                <Button
+                  key={theme.id}
+                  onClick={() => selectTheme(theme)}
+                  className="w-60 h-30 text-2xl mb-2"
+                >
+                  {theme.name}
+                </Button>
+              ))}
+            </div>
           </motion.div>
         )}
 
-        {step > 0 && step <= questions.length && (
+        {selectedTheme && step > 0 && step <= selectedQuestions.length && (
           <motion.div
             key={`question-${step}`}
             initial={{ x: 50, opacity: 0 }}
@@ -118,7 +169,9 @@ export default function Survey() {
             transition={{ duration: 0.4 }}
             className="w-full max-w-xl bg-white rounded-xl shadow p-6"
           >
-            <p className="text-lg mb-4">{questions[step - 1].question}</p>
+            <p className="text-lg mb-4">
+              {selectedQuestions[step - 1].question}
+            </p>
             <Input
               value={answers[step] || ""}
               onChange={(e) =>
@@ -131,12 +184,12 @@ export default function Survey() {
             />
             <p className="text-lg mb-4">{}</p>
             <Button onClick={nextStep} className="mt-4">
-              {step === questions.length ? "Finish" : "Next"}
+              {step === selectedQuestions.length ? "Finish" : "Next"}
             </Button>
           </motion.div>
         )}
 
-        {step > questions.length && (
+        {step > selectedQuestions.length && (
           <motion.div
             key="start"
             initial={{ opacity: 0, scale: 0.95 }}
@@ -146,7 +199,7 @@ export default function Survey() {
             className="text-center"
           >
             <h1 className="text-2xl font-semibold mb-6">
-              Thanks for answer! Wait till admin approves you
+              Thanks for answer! Your feedback is really worthy
             </h1>
             <h1 className="text-2xl font-semibold mb-6">
               {userData?.first_name}
