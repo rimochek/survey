@@ -118,11 +118,14 @@ export default function Home() {
                           <TableCell>{res.created_at}</TableCell>
                           <TableCell>{res.username}</TableCell>
                           {Object.entries(res.answers).map(
-                            ([questionID, answer]) => (
-                              <TableCell key={questionID}>
-                                {answer.answer}
-                              </TableCell>
-                            )
+                            ([questionID, answer]) => {
+                              const a = answer as { answer: string }
+                              return (
+                                <TableCell key={questionID}>
+                                  {a.answer}
+                                </TableCell>
+                              )
+                            }
                           )}
                         </TableRow>
                       ))}
